@@ -1,0 +1,45 @@
+name: gha-download-and-extract-artifact
+
+description: |-
+  GitHub Action used as a workaround for GHES multi-file artifact slowdown after
+  using gha-package-and-upload-artifact - Downloads via actions/download-artifact
+  and extracts artifacts. 
+
+author: albr21
+branding:
+  icon: download
+  color: white
+
+inputs:
+  path:
+    description: Path where to extract the downloaded artifact
+    required: true
+  artifact-id:
+    description: ID of the artifact to download from GitHub
+    required: true
+  package-name:
+    description: Name of the package inside the downloaded artifact, by default, it's set to artifact-id
+    required: false
+    default: ""
+  command-line-interpreter:
+    description: |-
+      Command line interpreter.
+      By default, it uses `bash`, but you can change it to `sh`.
+    required: false
+    default: bash
+
+runs:
+  using: composite
+  steps:
+    - name: Download Artifact
+      id: download-artifact
+      uses: actions/download-artifact@v3
+      with:
+        name: ${{ inputs.artifact-id }}
+        path: /tmp/
+
+    - name: Extract Artifact
+      run: |-
+        mkdir -p ${{ inputs.path }}
+        tar -xzf /tmp/${{ inputs.package-name || inputs.artifact-id }}.tar.gz -C ${{ inputs.path }} --strip-components=1
+      shell: ${{ inputs.command-line-interpreter }}
