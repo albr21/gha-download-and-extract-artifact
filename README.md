@@ -1,10 +1,20 @@
-# <project-name>
+# gha-download-and-extract-artifact
 
-<!-- A brief description of the project. -->
+GitHub Action used as a workaround for GHES multi-file artifact slowdown after
+using gha-package-and-upload-artifact - Downloads via actions/download-artifact
+and extracts artifacts. 
 
 ## Usage
 
-<!-- Provide instructions on how to use the project, including code examples if applicable. -->
+```yaml
+steps:
+  - name: Download and Extract Artifact
+    uses: albr21/gha-download-and-extract-artifact@1.0.0
+    with:
+      path: /path/to/extract
+      artifact-id: my-artifact
+      package-name: my-package
+```
 
 ## Contributing
 
