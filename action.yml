@@ -31,6 +31,17 @@ inputs:
 runs:
   using: composite
   steps:
+    - name: Validate Inputs
+      uses: albr21/gha-type-guard@1.0.0
+      with:
+        payload: |
+          [
+            {"value": "${{ inputs.path }}", "type": "string"},
+            {"value": "${{ inputs.artifact-id }}", "type": "string"},
+            {"value": "${{ inputs.package-name }}", "type": "string"},
+            {"value": "${{ inputs.command-line-interpreter }}", "type": "enum", "enumValues": ["bash", "sh"]}
+          ]
+
     - name: Download Artifact
       id: download-artifact
       uses: actions/download-artifact@v3
